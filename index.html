@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Kelembaban Tanah</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+        .card {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Monitoring Kelembaban Tanah</h2>
+        <div class="card" id="nilai-sensor">
+            <h3>Nilai Sensor Terakhir</h3>
+            <p id="sensor-value">60%</p>
+        </div>
+        <div class="card">
+            <h3>Grafik Sensor Kelembaban</h3>
+            <div class="chart-container">
+                <canvas id="chart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Inisialisasi data
+        let sensorData = [10, 12, 37, 82, 74, 100];
+        let labels = ["14:45", "14:50", "14:55", "15:00", "15:05", "15:10"];
+
+        // Inisialisasi chart
+        const ctx = document.getElementById('chart').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Kelembaban Tanah',
+                    data: sensorData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Fungsi untuk update nilai sensor dan chart
+        function updateData() {
+            // Menggenerate nilai sensor baru secara acak
+            let newValue = Math.floor(Math.random() * 101);
+            document.getElementById('sensor-value').innerText = newValue + '%';
+
+            // Mengupdate data chart
+            sensorData.shift();
+            sensorData.push(newValue);
+            chart.update();
+        }
+
+        // Refresh data setiap 5 detik
+        setInterval(updateData, 5000);
+    </script>
+</body>
+</html>
